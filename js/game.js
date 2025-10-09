@@ -73,13 +73,15 @@ export class Game {
   }
 
   // === генерация букв ===
-  _generateSequence() {
-    const letters = getGameLetters();
-    const count = 6;
-    this.sequence = Array.from({ length: count }, () =>
-      letters[Math.floor(Math.random() * letters.length)]
-    );
-  }
+    _generateSequence() {
+      const letters = getGameLetters();
+      const count = this.levelIndex === 1 ? 6 :
+                    this.levelIndex === 2 ? 8 : 10;
+
+      this.sequence = Array.from({ length: count }, () =>
+        letters[Math.floor(Math.random() * letters.length)]
+      );
+    }
 
   // === обновление букв при смене языка ===
   refreshLetters() {
@@ -91,33 +93,53 @@ export class Game {
   }
 
   // === создание поля ===
-  _spawnTrack() {
-    this.$playfield.querySelectorAll(".letter-tile, .start-tile").forEach(el => el.remove());
+ // === создание поля с рандомным расположением ===
+// === создание поля: тропинка ===
+_spawnTrack() {
+  const pf = this.$playfield;
+  pf.querySelectorAll(".letter-tile, .start-tile").forEach(el => el.remove());
 
-    const lang = getCurrentLang();
+  const lang = getCurrentLang();
 
-    // старт
-    const startTile = document.createElement("div");
-    startTile.className = "start-tile";
-    startTile.textContent = lang === "en" ? "START" : "СТАРТ";
-    startTile.style.left = "50px";
-    startTile.style.bottom = "90px";
-    this.$playfield.appendChild(startTile);
+  // стартовая плитка
+  const startTile = document.createElement("div");
+  startTile.className = "start-tile";
+  startTile.textContent = lang === "en" ? "START" : "СТАРТ";
+  pf.appendChild(startTile);
 
-    // буквы
-    const fieldW = this.$playfield.clientWidth - 180;
-    const fieldH = this.$playfield.clientHeight - 160;
-    this.sequence.forEach((ch, i) => {
-      const tile = document.createElement("div");
-      tile.className = "letter-tile";
-      tile.textContent = ch.toUpperCase();
-      const left = 140 + (i * fieldW / this.sequence.length);
-      const bottom = 100 + Math.sin(i * 1.3) * (fieldH * 0.25) + fieldH * 0.25;
-      tile.style.left = `${left}px`;
-      tile.style.bottom = `${Math.max(80, Math.min(bottom, fieldH))}px`;
-      this.$playfield.appendChild(tile);
-    });
-  }
+  const pfW = pf.clientWidth;
+  const pfH = pf.clientHeight;
+  const tileSize = parseFloat(getComputedStyle(pf).getPropertyValue("--tile")) || 64;
+
+  // позиция старта
+  const startX = tileSize * 1.2;
+  const startY = tileSize * 1.3;
+  startTile.style.left = `${startX}px`;
+  startTile.style.bottom = `${startY}px`;
+
+  // определяем сколько букв на уровне
+  const count = this.levelIndex === 1 ? 6 :
+                this.levelIndex === 2 ? 8 : 10;
+
+  const stepX = (pfW - tileSize * 3) / (count + 1);
+  const amplitude = pfH * 0.25; // высота волны
+
+  // создаём “тропинку” из букв
+  this.sequence.forEach((ch, i) => {
+    const tile = document.createElement("div");
+    tile.className = "letter-tile";
+    tile.textContent = ch.toUpperCase();
+
+    // плавная извилина — волна синусом
+    const x = startX + (i + 1) * stepX;
+    const y = startY + Math.sin(i * 1.2) * amplitude * 0.5 + amplitude * 0.6;
+
+    tile.style.left = `${x}px`;
+    tile.style.bottom = `${y}px`;
+    pf.appendChild(tile);
+  });
+}
+
 
   // === позиция героя ===
   _placeHero() {
