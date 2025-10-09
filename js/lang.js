@@ -36,3 +36,4 @@ export const i18n = {
     return typeof val === "function" ? val(...args) : val || key;
   }
 };
+

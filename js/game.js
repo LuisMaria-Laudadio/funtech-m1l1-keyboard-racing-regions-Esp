@@ -166,38 +166,27 @@ export class Game {
   // === уровень пройден ===
     // === уровень пройден ===
   _levelComplete() {
-    clearInterval(this.timer);
-    window.removeEventListener("keydown", this._onKey);
-    sfx.level();
+  clearInterval(this.timer);
+  window.removeEventListener("keydown", this._onKey);
+  sfx.level();
 
-    const modal = document.getElementById("level-modal");
-    const gif = modal.querySelector(".win-gif");
-    const title = modal.querySelector("#level-modal-title");
-    const btn = modal.querySelector("#level-modal-btn");
-
-    if (gif) gif.src = "./assets/win.gif";
-
-    if (this.levelIndex < 3) {
-      // промежуточный уровень
-      title.textContent = getCurrentLang() === "en"
-        ? `Level ${this.levelIndex} complete!`
-        : `Уровень ${this.levelIndex} пройден!`;
-      btn.textContent = getCurrentLang() === "en" ? "Next Level" : "Следующий уровень";
-      btn.onclick = () => {
-        modal.hidden = true;
-        this.nextLevel();
-      };
-    } else {
-      // последний — победа!
-      title.textContent = getCurrentLang() === "en"
-        ? "You won!"
-        : "Ты победил!";
-      btn.textContent = getCurrentLang() === "en" ? "Restart" : "Рестарт";
-      btn.onclick = () => location.reload();
-    }
-
+  const modal = document.getElementById("win-modal");
+  if (modal) {
     modal.hidden = false;
+    modal.querySelector(".win-gif").src = "./assets/win.gif";
+    const btn = modal.querySelector(".btn-gradient");
+    btn.textContent = this.levelIndex >= 3 ? "Финиш" : "Следующий уровень";
+    btn.onclick = () => {
+      modal.hidden = true;
+      if (this.levelIndex >= 3) {
+        location.reload();
+      } else {
+        this.nextLevel();
+      }
+    };
   }
+}
+
 
 
 
