@@ -220,6 +220,7 @@ _spawnTrack() {
 
 
 
+
   // === таймер ===
   _startTimer() {
     clearInterval(this.timer);
@@ -300,3 +301,26 @@ retryLevel() {
   window.addEventListener("keydown", this._onKey);
 }
 }
+
+// === АВТОМАСШТАБИРОВАНИЕ ИГРОВОГО ПОЛЯ ===
+function fitPlayfield() {
+  const pf = document.querySelector('.playfield');
+  const frame = document.querySelector('.monitor-frame');
+  if (!pf || !frame) return;
+
+  // реальные видимые размеры (а не scroll)
+  const pfRect = pf.getBoundingClientRect();
+  const frameRect = frame.getBoundingClientRect();
+
+  // вычисляем пропорциональный масштаб
+  const scaleX = frameRect.width / pfRect.width;
+  const scaleY = frameRect.height / pfRect.height;
+  const scale = Math.min(scaleX, scaleY, 1);
+
+  pf.style.setProperty('--pf-scale', scale);
+  pf.classList.add('playfield-scaled');
+}
+
+// применяем сразу при загрузке и при изменении окна
+window.addEventListener('resize', fitPlayfield);
+window.addEventListener('load', fitPlayfield);

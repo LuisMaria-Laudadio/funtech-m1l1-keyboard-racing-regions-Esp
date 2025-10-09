@@ -27,3 +27,20 @@ document.getElementById("restart-top-btn")?.addEventListener("click", () => {
     game.nextLevel();
   }
 });
+
+// === АВТОМАСШТАБИРОВАНИЕ MONITOR ===
+function fitMonitor() {
+  const monitor = document.querySelector('.monitor-inner');
+  const frame = document.querySelector('.monitor-frame');
+  if (!monitor || !frame) return;
+
+  const scaleX = frame.clientWidth / monitor.offsetWidth;
+  const scaleY = frame.clientHeight / monitor.offsetHeight;
+  const scale = Math.min(scaleX, scaleY);
+
+  monitor.style.setProperty('--scale', scale);
+  monitor.classList.add('scaled');
+}
+
+window.addEventListener('resize', fitMonitor);
+window.addEventListener('load', fitMonitor);
