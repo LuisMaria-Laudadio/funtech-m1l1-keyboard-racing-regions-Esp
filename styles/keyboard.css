@@ -1,0 +1,56 @@
+.vk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.vk-row {
+  display: flex;
+  gap: 10px;
+}
+
+.vk-key {
+  background: #1a2337;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 18px;
+  color: #cfd7f2;
+  user-select: none;
+  transition: all 0.25s ease;
+  box-shadow: inset 0 -2px 0 #0e142a;
+}
+
+/* 🔵 активная клавиша — цель игрока */
+.vk-key.active {
+  background: linear-gradient(135deg, #6a6aff, #8265ff);
+  color: #fff;
+  box-shadow:
+    0 0 14px rgba(100, 140, 255, 0.9),
+    0 0 24px rgba(90, 90, 255, 0.5),
+    inset 0 -2px 0 #353aff;
+  transform: scale(1.1);
+  animation: pulse 1.2s infinite ease-in-out;
+}
+
+/* 💚 правильное нажатие */
+.vk-key.good {
+  background: linear-gradient(135deg, #3fd47d, #1a8a4c);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(60, 255, 140, 0.6);
+  transform: scale(1.05);
+}
+
+/* ❤️ ошибка */
+.vk-key.bad {
+  background: linear-gradient(135deg, #ff4f4f, #c93333);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 80, 80, 0.7);
+  transform: scale(0.95);
+}
+
+@keyframes pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.35); }
+}

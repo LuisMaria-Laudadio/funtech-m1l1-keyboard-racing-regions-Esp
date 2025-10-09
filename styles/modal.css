@@ -1,0 +1,83 @@
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+}
+
+.card {
+  background: #141a2a;
+  padding: 30px 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+.modal.hidden-init { display: none; }
+
+.win-modal {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.win-modal.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.win-box {
+  background: linear-gradient(180deg, #1c1f38, #0d0f20);
+  border: 2px solid #3b3f6b;
+  border-radius: 16px;
+  padding: 30px 50px;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(0,0,0,0.5);
+  animation: popIn 0.4s ease;
+}
+@keyframes popIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.win-gif {
+  width: 200px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.btn-gradient {
+  background: linear-gradient(90deg, #6a6aff, #7d5bff);
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  padding: 10px 25px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn-gradient:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #7d5bff;
+}
+
+.in-monitor-modal[hidden] {
+  display: none;
+}
+
+.in-monitor-modal {
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.55);
+  z-index: 20;
+}
+

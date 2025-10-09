@@ -1,0 +1,110 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body {
+  background: linear-gradient(#0d0f1a, #101426);
+  color: white;
+  overflow: hidden;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 20px;
+  background: #0b0e1c;
+  border-bottom: 2px solid #1f2a48;
+}
+
+.brand { font-weight: 700; font-size: 18px; }
+
+.btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+
+.btn.primary {
+  background: linear-gradient(90deg, #00b4ff, #7d6eff);
+  color: white;
+}
+
+.btn.secondary {
+  background: #333b56;
+  color: #fff;
+}
+
+.hidden-init { display: none !important; }
+
+.lang-switch {
+  display: inline-flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.lang-btn {
+  background: #1a1f35;
+  color: #d8e0ff;
+  border: 1px solid #2e3a68;
+  border-radius: 8px;
+  padding: 5px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+  background: #25305a;
+  border-color: #3a4b8b;
+  color: #ffffff;
+}
+
+.lang-btn.active {
+  background: linear-gradient(135deg, #4b8cff, #8265ff);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(100,140,255,0.5);
+}
+
+/* ====== Кнопка в верхнем баре ====== */
+.restart-btn {
+  margin-left: 14px;
+  background: linear-gradient(135deg, #3a5eff, #00bfff);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0, 150, 255, 0.4);
+  transition: all 0.25s ease;
+}
+
+.restart-btn:hover {
+  background: linear-gradient(135deg, #4a7bff, #1ad1ff);
+  box-shadow: 0 0 20px rgba(0, 180, 255, 0.65);
+  transform: translateY(-1px);
+}
+
+/* ====== Улучшенная кнопка в модалке ====== */
+.btn-gradient {
+  background: linear-gradient(135deg, #6a4fff, #2a9dff);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 10px 28px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(60, 120, 255, 0.5);
+  transition: all 0.25s ease;
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(135deg, #826aff, #4dc6ff);
+  box-shadow: 0 0 28px rgba(80, 160, 255, 0.75);
+  transform: scale(1.05);
+}
