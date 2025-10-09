@@ -81,3 +81,11 @@
   z-index: 20;
 }
 
+.letter-tile {
+  animation: popIn .3s ease;
+}
+@keyframes popIn {
+  from { transform: scale(0.7); opacity: 0; filter: brightness(1.5); }
+  to { transform: scale(1); opacity: 1; filter: brightness(1); }
+}
+

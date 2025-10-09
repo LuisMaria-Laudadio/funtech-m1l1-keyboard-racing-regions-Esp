@@ -95,6 +95,7 @@ export class Game {
   // === создание поля ===
  // === создание поля с рандомным расположением ===
 // === создание поля: тропинка ===
+// === создание поля: извилистая тропинка с высотами ===
 _spawnTrack() {
   const pf = this.$playfield;
   pf.querySelectorAll(".letter-tile, .start-tile").forEach(el => el.remove());
@@ -111,18 +112,23 @@ _spawnTrack() {
   const pfH = pf.clientHeight;
   const tileSize = parseFloat(getComputedStyle(pf).getPropertyValue("--tile")) || 64;
 
-  // позиция старта
+  // стартовая позиция
   const startX = tileSize * 1.2;
-  const startY = tileSize * 1.3;
+  const startY = tileSize * 1.4;
   startTile.style.left = `${startX}px`;
   startTile.style.bottom = `${startY}px`;
 
-  // определяем сколько букв на уровне
+  // количество букв по уровню
   const count = this.levelIndex === 1 ? 6 :
                 this.levelIndex === 2 ? 8 : 10;
 
+  // шаг по X
   const stepX = (pfW - tileSize * 3) / (count + 1);
-  const amplitude = pfH * 0.25; // высота волны
+
+  // “высота волны” и “высота тропинки” по уровню
+  const baseHeights = [pfH * 0.2, pfH * 0.4, pfH * 0.6];
+  const baseY = baseHeights[Math.min(this.levelIndex - 1, 2)];
+  const amplitude = pfH * (0.12 + 0.04 * this.levelIndex); // чем выше уровень — тем волнистей
 
   // создаём “тропинку” из букв
   this.sequence.forEach((ch, i) => {
@@ -130,15 +136,17 @@ _spawnTrack() {
     tile.className = "letter-tile";
     tile.textContent = ch.toUpperCase();
 
-    // плавная извилина — волна синусом
+    // координаты — волна синусом, с небольшой случайностью
     const x = startX + (i + 1) * stepX;
-    const y = startY + Math.sin(i * 1.2) * amplitude * 0.5 + amplitude * 0.6;
+    const y = baseY + Math.sin(i * 1.1) * amplitude + (Math.random() - 0.5) * 20;
 
     tile.style.left = `${x}px`;
-    tile.style.bottom = `${y}px`;
+    tile.style.bottom = `${Math.max(tileSize, Math.min(y, pfH - tileSize * 2))}px`;
+
     pf.appendChild(tile);
   });
 }
+
 
 
   // === позиция героя ===
@@ -227,20 +235,68 @@ _spawnTrack() {
   }
 
   // === проигрыш ===
-  _gameOver() {
-    sfx.timeout();
-    window.removeEventListener("keydown", this._onKey);
-    const modal = document.getElementById("win-modal");
-    if (modal) {
-      modal.classList.add("visible");
-      const gif = modal.querySelector(".win-gif");
-      const btn = modal.querySelector(".btn-gradient");
-      if (gif) gif.src = "./assets/win.gif";
-      if (btn) {
-        btn.textContent =
-          getCurrentLang() === "en" ? "Restart" : "Рестарт";
-        btn.onclick = () => location.reload();
-      }
-    }
-  }
+  // === время вышло ===
+_gameOver() {
+  sfx.timeout();
+  window.removeEventListener("keydown", this._onKey);
+  clearInterval(this.timer);
+
+  // Удаляем старую модалку, если она уже есть
+  let modal = document.getElementById("timeout-modal");
+  if (modal) modal.remove();
+
+  // Создаём заново
+  modal = document.createElement("div");
+  modal.id = "timeout-modal";
+  modal.className = "in-monitor-modal";
+  modal.innerHTML = `
+    <div class="card lose">
+      <h2>${getCurrentLang() === "en" ? "Time’s up!" : "Время вышло!"}</h2>
+      <p>${getCurrentLang() === "en"
+        ? "Try again from this level."
+        : "Попробуй ещё раз с этого уровня."}</p>
+      <button id="retry-btn" class="btn-gradient">
+        ${getCurrentLang() === "en" ? "Restart Level" : "Рестарт уровня"}
+      </button>
+    </div>
+  `;
+  this.$playfield.closest(".monitor-inner").appendChild(modal);
+
+  // Плавное появление
+  requestAnimationFrame(() => modal.classList.add("visible"));
+
+  // Обработчик кнопки
+  const retryBtn = modal.querySelector("#retry-btn");
+  retryBtn.onclick = () => {
+    modal.classList.remove("visible");
+    setTimeout(() => modal.remove(), 300);
+    this.retryLevel(); // 🔁 перезапуск текущего уровня
+  };
+}
+
+// === повтор текущего уровня ===
+retryLevel() {
+  clearInterval(this.timer);
+  this.targetIndex = 0;
+
+  // пересоздаём поле и буквы
+  this._generateSequence();
+  this._spawnTrack();
+  this._placeHero();
+
+  // 🕒 сбрасываем таймер под уровень
+  this.timeLeft =
+    this.levelIndex === 1 ? 60 :
+    this.levelIndex === 2 ? 50 : 40;
+
+  this._updateHUD();
+  this._startTimer();
+
+  // сбрасываем подсветку
+  clearStates();
+  lightKey(this.sequence[this.targetIndex]);
+
+  // включаем клавиши снова
+  window.addEventListener("keydown", this._onKey);
+}
 }
