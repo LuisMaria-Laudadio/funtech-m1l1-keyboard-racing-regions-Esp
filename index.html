@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -11,10 +11,6 @@
 <body>
   <header class="topbar">
     <div class="brand">M1U1 • Keyboard Rush</div>
-    <div class="lang-switch">
-      <button class="lang-btn active" data-lang="ru">RU</button>
-      <button class="lang-btn" data-lang="en">EN</button>
-    </div>
     <button id="restart-top-btn" class="btn small restart-btn">🔄 Restart</button>
   </header>
 
@@ -30,14 +26,10 @@
     <section class="screen" id="start-screen">
       <div class="monitor-frame">
         <div class="monitor-inner center">
-          <h1 id="title">Клавиатурные гонки</h1>
-          <p id="subtitle">Нажимай подсвеченные буквы и добеги до финиша!</p>
+          <h1 id="title">Keyboard Rush</h1>
+          <p id="subtitle">Press the highlighted letters to reach the finish!</p>
           <div class="start-actions">
-            <div class="lang-switch">
-              <button class="lang-btn active" data-lang="ru">RU</button>
-              <button class="lang-btn" data-lang="en">EN</button>
-            </div>
-            <button id="start-btn" class="btn primary">Старт</button>
+            <button id="start-btn" class="btn primary">Start</button>
           </div>
         </div>
       </div>
@@ -46,8 +38,7 @@
     <!-- Игра -->
     <section class="screen" id="game-screen" hidden>
       <div class="monitor-frame">
-
-        <!-- 🔹 HUD и таймер ВНЕ монитора -->
+        <!-- HUD и таймер -->
         <div class="hud-outside">
           <div class="hud">
             <div class="pill" id="hud-level">Level 1</div>
@@ -61,12 +52,12 @@
             <div class="hero" id="hero"></div>
           </div>
 
-          <!-- модалка -->
+          <!-- Модалка победы -->
           <div class="in-monitor-modal" id="win-modal" hidden>
             <div class="card win">
               <img class="win-gif" src="./assets/win.gif" alt="win">
-              <h3>Уровень пройден!</h3>
-              <button class="btn-gradient">Следующий уровень</button>
+              <h3>Level Complete!</h3>
+              <button class="btn-gradient">Next Level</button>
             </div>
           </div>
         </div>

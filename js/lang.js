@@ -1,18 +1,5 @@
 export const LANGS = {
-  ru: {
-    start: "Старт",
-    next: "Следующий уровень",
-    restart: "Рестарт",
-    level: (n) => `Уровень ${n}`,
-    goal: (n) => `Цель: ${n} букв`,
-    progress: (c, t) => `Прогресс: ${c}/${t}`,
-    hint: "Нажимай нужные буквы",
-    levelupTitle: "Уровень пройден!",
-    levelupText: (n) => `Переходим к уровню ${n}`,
-    winTitle: "Победа!",
-    timeoutTitle: "Время вышло!",
-  },
-  en: {
+  base: {
     start: "Start",
     next: "Next Level",
     restart: "Restart",
@@ -28,12 +15,13 @@ export const LANGS = {
 };
 
 export const i18n = {
-  current: "ru",
-  set(lang) { if (LANGS[lang]) this.current = lang; },
+  current: "base",
+  set(lang) {
+    if (LANGS[lang]) this.current = lang;
+  },
   t(key, ...args) {
     const dict = LANGS[this.current];
     const val = dict[key];
     return typeof val === "function" ? val(...args) : val || key;
-  }
+  },
 };
-

@@ -1,6 +1,6 @@
 // js/app.js
 import { Game } from "./game.js";
-import { setLanguage, mountKeyboard } from "./keyboard.js";
+import { mountKeyboard } from "./keyboard.js";
 
 let game = null;
 
@@ -15,6 +15,7 @@ function showScreen(which) {
 
 function destroyGame() {
   if (!game) return;
+
   // остановить таймер и клавиатуру
   clearInterval(game.timer);
   window.removeEventListener("keydown", game._onKey);
@@ -28,6 +29,7 @@ function destroyGame() {
   // подчистить поле
   const pf = document.getElementById("playfield");
   pf?.querySelectorAll(".letter-tile,.start-tile").forEach(n => n.remove());
+
   // сбросить HUD
   const t = document.getElementById("timer");
   if (t) t.textContent = "60";
@@ -68,17 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
     showScreen("start");
   });
 
-  // переключение языка (кнопки есть и в шапке, и на старт-экране)
-  document.querySelectorAll(".lang-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const lang = btn.dataset.lang;
-      document.querySelectorAll(".lang-btn").forEach(b =>
-        b.classList.toggle("active", b === btn)
-      );
-      setLanguage(lang); // keyboard.js сам диспатчит languageChanged
-    });
-  });
-
   window.addEventListener("resize", fitMonitor);
 });
 
@@ -112,7 +103,7 @@ if (restartBtn) {
     }
 
     // 🧠 Игра остаётся созданной, просто в "паузе"
-    if (typeof game !== "undefined" && game.timer) {
+    if (typeof game !== "undefined" && game?.timer) {
       clearInterval(game.timer);
       game.timeLeft = 60;
     }
@@ -121,11 +112,10 @@ if (restartBtn) {
   });
 }
 
-
 // === BACK TO START (универсально, без reload) ===
 function goToStart() {
-  const startScreen = document.getElementById('start-screen');
-  const gameScreen  = document.getElementById('game-screen');
+  const startScreen = document.getElementById("start-screen");
+  const gameScreen  = document.getElementById("game-screen");
   if (!startScreen || !gameScreen) return;
 
   // показать старт, скрыть игру
@@ -133,31 +123,31 @@ function goToStart() {
   gameScreen.hidden  = true;
 
   // спрятать любые модалки внутри монитора
-  document.querySelectorAll('.in-monitor-modal').forEach(m => {
-    m.classList.remove('visible');
-    m.setAttribute('hidden', '');
+  document.querySelectorAll(".in-monitor-modal").forEach(m => {
+    m.classList.remove("visible");
+    m.setAttribute("hidden", "");
   });
 
   // визуальный сброс HUD
-  const hudLevel = document.getElementById('hud-level');
-  const hudProgress = document.getElementById('hud-progress');
-  const timer = document.getElementById('timer');
-  if (hudLevel) hudLevel.textContent = 'Level 1';
-  if (hudProgress) hudProgress.textContent = '0/6';
-  if (timer) timer.textContent = '60';
+  const hudLevel = document.getElementById("hud-level");
+  const hudProgress = document.getElementById("hud-progress");
+  const timer = document.getElementById("timer");
+  if (hudLevel) hudLevel.textContent = "Level 1";
+  if (hudProgress) hudProgress.textContent = "0/6";
+  if (timer) timer.textContent = "60";
 
   // очистить поле и вернуть героя
-  const pf = document.getElementById('playfield');
-  pf?.querySelectorAll('.letter-tile,.start-tile').forEach(el => el.remove());
-  const hero = document.getElementById('hero');
+  const pf = document.getElementById("playfield");
+  pf?.querySelectorAll(".letter-tile,.start-tile").forEach(el => el.remove());
+  const hero = document.getElementById("hero");
   if (hero) {
-    hero.style.left = '60px';
-    hero.style.bottom = '100px';
-    hero.style.display = 'none';
+    hero.style.left = "60px";
+    hero.style.bottom = "100px";
+    hero.style.display = "none";
   }
 
-  // НЕ выключаем логику, просто сбросим таймеры/счётчики у текущей игры, если она есть
-  if (typeof game !== 'undefined' && game) {
+  // НЕ выключаем логику, просто сбрасываем таймеры и счётчики
+  if (typeof game !== "undefined" && game) {
     try { clearInterval(game.timer); } catch {}
     game.timeLeft = 60;
     game.levelIndex = 0;
@@ -165,26 +155,26 @@ function goToStart() {
     game.targetIndex = 0;
   }
 
-  // пересобрать клавиатуру под текущий язык и подогнать масштаб
+  // пересобрать клавиатуру и масштаб
   try { mountKeyboard(); } catch {}
   try {
-    const monitor = document.querySelector('.monitor-inner');
-    const frame = document.querySelector('.monitor-frame');
+    const monitor = document.querySelector(".monitor-inner");
+    const frame = document.querySelector(".monitor-frame");
     if (monitor && frame) {
       const baseW = 1000, baseH = 540;
       const scaleX = frame.clientWidth / baseW;
       const scaleY = frame.clientHeight / baseH;
       const scale  = Math.min(scaleX, scaleY);
-      monitor.style.setProperty('--scale', scale);
-      monitor.classList.add('scaled');
+      monitor.style.setProperty("--scale", scale);
+      monitor.classList.add("scaled");
     }
   } catch {}
 
-  console.log('[restart] back to start screen');
+  console.log("[restart] back to start screen");
 }
 
-// Делегирование: ловим КЛИК по ЛЮБОЙ кнопке рестарта
-document.addEventListener('click', (e) => {
+// Делегирование: ловим клик по любой кнопке рестарта
+document.addEventListener("click", (e) => {
   const btn = e.target.closest('#restart-btn, #restart-top-btn, .restart-btn, [data-action="restart"]');
   if (!btn) return;
   e.preventDefault();
