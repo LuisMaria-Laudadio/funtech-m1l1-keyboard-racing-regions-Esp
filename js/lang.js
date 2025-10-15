@@ -1,20 +1,28 @@
 // js/lang.js
 export const STR = {
   base: {
-    title: '1Keyboard Rush',
-    subtitle: '1Press the highlighted letters to reach the finish!',
-    start: '1Start!!!',
-    next: '1Next Level',
-    restartTop: '1Restart',
-    startTile: '1START',
-    winTitle: '1Level Complete!',
-    timeoutTitle: "1Time’s up!",
-    timeoutMsg: '1Try again from this level.',
-    restartLevel: '1Restart Level',
-    level: (n) => `1Level ${n}`,
+    title: 'Keyboard Rush',
+    subtitle: 'Press the highlighted letters to reach the finish!',
+    start: 'Start!!!',
+    next: 'Next Level',
+    restartTop: 'Restart',
+    startTile: 'START',
+    winTitle: 'Level Complete!',
+    timeoutTitle: "Time’s up!",
+    timeoutMsg: 'Try again from this level.',
+    restartLevel: 'Restart Level',
+    level: (n) => `Level ${n}`,
     progress: (c, t) => `${c}/${t}`,
   }
 };
+
+
+
+
+
+
+
+// НЕ ПЕРЕВОДИТЬ ТО ЧТО НИЖЕ //
 
 export const i18n = {
   t(key, ...args) {
