@@ -42,7 +42,6 @@
   transform: scale(1.05);
 }
 
-/* ❤️ ошибка */
 .vk-key.bad {
   background: linear-gradient(135deg, #ff4f4f, #c93333);
   color: #fff;

@@ -6,6 +6,7 @@ import {
   lightKey
 } from "./keyboard.js";
 import { sfx } from "./audio.js";
+import { i18n } from "./lang.js";
 
 export class Game {
   constructor() {
@@ -86,7 +87,7 @@ export class Game {
     // стартовая плитка
     const startTile = document.createElement("div");
     startTile.className = "start-tile";
-    startTile.textContent = "START";
+    startTile.textContent = i18n.t("startTile");
     pf.appendChild(startTile);
 
     const pfW = pf.clientWidth;
@@ -170,11 +171,13 @@ export class Game {
     sfx.level();
 
     const modal = document.getElementById("win-modal");
+    const h3 = modal.querySelector("h3");
+    if (h3) h3.textContent = i18n.t("winTitle");
     if (modal) {
       modal.hidden = false;
       modal.querySelector(".win-gif").src = "./assets/win.gif";
       const btn = modal.querySelector(".btn-gradient");
-      btn.textContent = this.levelIndex >= 3 ? "Finish" : "Next Level";
+      btn.textContent = this.levelIndex >= 3 ? "Finish" : i18n.t("next");
       btn.onclick = () => {
         modal.hidden = true;
         if (this.levelIndex >= 3) {
@@ -202,33 +205,40 @@ export class Game {
 
   // === проигрыш ===
   _gameOver() {
-    sfx.timeout();
-    window.removeEventListener("keydown", this._onKey);
-    clearInterval(this.timer);
+  sfx.timeout();
+  window.removeEventListener("keydown", this._onKey);
+  clearInterval(this.timer);
 
-    let modal = document.getElementById("timeout-modal");
-    if (modal) modal.remove();
+  // Удаляем старую модалку, если уже есть
+  let modal = document.getElementById("timeout-modal");
+  if (modal) modal.remove();
 
-    modal = document.createElement("div");
-    modal.id = "timeout-modal";
-    modal.className = "in-monitor-modal";
-    modal.innerHTML = `
-      <div class="card lose">
-        <h2>Time’s up!</h2>
-        <p>Try again from this level.</p>
-        <button id="retry-btn" class="btn-gradient">Restart Level</button>
-      </div>
-    `;
-    this.$playfield.closest(".monitor-inner").appendChild(modal);
+  // Создаём заново
+  modal = document.createElement("div");
+  modal.id = "timeout-modal";
+  modal.className = "in-monitor-modal";
+  modal.innerHTML = `
+    <div class="card lose">
+      <h2>${i18n.t("timeoutTitle")}</h2>
+      <p>${i18n.t("timeoutMsg")}</p>
+      <button id="retry-btn" class="btn-gradient">${i18n.t("restartLevel")}</button>
+    </div>
+  `;
 
-    requestAnimationFrame(() => modal.classList.add("visible"));
-    const retryBtn = modal.querySelector("#retry-btn");
-    retryBtn.onclick = () => {
-      modal.classList.remove("visible");
-      setTimeout(() => modal.remove(), 300);
-      this.retryLevel();
-    };
-  }
+  this.$playfield.closest(".monitor-inner").appendChild(modal);
+  requestAnimationFrame(() => modal.classList.add("visible"));
+
+  // === Исправленный обработчик кнопки ===
+  const retryBtn = modal.querySelector("#retry-btn");
+  retryBtn.addEventListener("click", () => {
+    modal.classList.remove("visible");
+    setTimeout(() => modal.remove(), 200);
+
+    // Полный сброс текущего уровня
+    this.retryLevel();
+  });
+}
+
 
   retryLevel() {
     clearInterval(this.timer);

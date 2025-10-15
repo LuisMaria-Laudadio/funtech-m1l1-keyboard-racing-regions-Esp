@@ -1,6 +1,7 @@
 // js/app.js
 import { Game } from "./game.js";
 import { mountKeyboard } from "./keyboard.js";
+import { applyStaticTexts } from "./lang.js";  // ⬅️ добавили
 
 let game = null;
 
@@ -54,6 +55,7 @@ function fitMonitor() {
 
 // ===== init after DOM =====
 document.addEventListener("DOMContentLoaded", () => {
+  applyStaticTexts();     // ⬅️ расставили все статические надписи
   mountKeyboard();
   fitMonitor();
 
@@ -145,7 +147,7 @@ function goToStart() {
     hero.style.bottom = "100px";
     hero.style.display = "none";
   }
-
+  applyStaticTexts();     // ⬅️ на всякий случай синхронизируем текст
   // НЕ выключаем логику, просто сбрасываем таймеры и счётчики
   if (typeof game !== "undefined" && game) {
     try { clearInterval(game.timer); } catch {}
