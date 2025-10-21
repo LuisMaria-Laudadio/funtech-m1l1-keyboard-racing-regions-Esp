@@ -1,17 +1,17 @@
 // js/lang.js
 export const STR = {
   base: {
-    title: 'Keyboard Rush',
-    subtitle: 'Press the highlighted letters to reach the finish!',
-    start: 'Start!!!',
-    next: 'Next Level',
-    restartTop: 'Restart',
-    startTile: 'START',
-    winTitle: 'Level Complete!',
-    timeoutTitle: "Time’s up!",
-    timeoutMsg: 'Try again from this level.',
-    restartLevel: 'Restart Level',
-    level: (n) => `Level ${n}`,
+    title: 'Carrera de teclado',
+    subtitle: '¡Presiona las letras resaltadas para llegar a la meta!',
+    start: 'Iniciar!!!',
+    next: 'Siguente nivel',
+    restartTop: 'Reinicar',
+    startTile: 'Inicio',
+    winTitle: 'Nivel completado',
+    timeoutTitle: "¡Se acabó el tiempo!",
+    timeoutMsg: 'Inténtalo de nuevo desde este nivel.',
+    restartLevel: 'Reinicar Nivel',
+    level: (n) => `Nivel ${n}`,
     progress: (c, t) => `${c}/${t}`,
   }
 };
