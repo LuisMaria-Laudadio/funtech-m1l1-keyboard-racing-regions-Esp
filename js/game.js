@@ -63,7 +63,7 @@ export class Game {
   // === обновление текста HUD ===
   _updateHUD() {
     if (this.$hudLevel && this.$hudProgress) {
-      this.$hudLevel.textContent = `Level ${this.levelIndex}`;
+      this.$hudLevel.textContent = `Nivel ${this.levelIndex}`;
       this.$hudProgress.textContent = `${this.targetIndex}/${this.sequence.length}`;
     }
   }
@@ -177,7 +177,7 @@ export class Game {
       modal.hidden = false;
       modal.querySelector(".win-gif").src = "./assets/win.gif";
       const btn = modal.querySelector(".btn-gradient");
-      btn.textContent = this.levelIndex >= 3 ? "Finish" : i18n.t("next");
+      btn.textContent = this.levelIndex >= 3 ? "Meta" : i18n.t("next");
       btn.onclick = () => {
         modal.hidden = true;
         if (this.levelIndex >= 3) {
